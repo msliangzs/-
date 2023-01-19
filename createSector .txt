@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- 本代码使用vscode编写 
+    作者：msliangsz
+    时间：2020年10月12日-->
+<html lang="zh-cnm-Hans">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>绘制饼形图</title>
+    </head>
+    <body>
+        
+        <canvas id="canvas" width="400" height="400" style="border:1px dashed gray;"></canvas>
+        
+        <script type="text/javascript">
+            window.onload=function(){
+                var cnv=document.getElementById('canvas');
+                var cxt=cnv.getContext("2d");
+
+                /*封装函数*/
+                function createSector(cxt,x,y,r,angle1,angle2){
+                    cxt.beginPath();                             
+                    cxt.moveTo(x,y);
+                    //移动到开始位置
+                    cxt.arc(x,y,r,angle1,angle2);
+                    //直接画到圆弧结束位置
+                    cxt.closePath();
+                    //调用fill()时没有闭合的路径会自动闭合 不需要写closepath（）
+                }    
+                
+                /*绘制四角的圆弧*/   
+                    createSector(cxt,0,0,100,0,90*Math.PI/180);
+                    cxt.fillStyle="#fddb3a";
+                    cxt.fill();
+                    createSector(cxt,400,0,100,90*Math.PI/180,180*Math.PI/180);
+                    cxt.fillStyle="#07689f";
+                    cxt.fill();
+                    createSector(cxt,0,400,100,270*Math.PI/180,360*Math.PI/180);
+                    cxt.fillStyle="#ea5455";
+                    cxt.fill();
+                    createSector(cxt,400,400,100,180*Math.PI/180,270*Math.PI/180);
+                    cxt.fillStyle='#6f4a8e';
+                    cxt.fill();
+                
+                /*绘制饼状图*/
+
+                var nums = [10,10,10,20,20,30];
+                var colors = ["#fcdada","#edc988","#3d7ea6","#557571","#d49a89","#E3FDF5"];
+                var start = 0;
+                var end = 0;
+                cxt.translate(200,200);
+                //重新设置圆点
+
+                //绘制圆饼
+                function pieChart(){
+                     for (var i = 0;i < nums.length; i ++){
+                        end += nums[i]/50*Math.PI;//终止角度
+                        createSector(cxt,0,0,150,start,end);                        
+                        cxt.strokeStyle = "white";
+                        cxt.fillStyle = colors[i];
+                        cxt.arc(0,0,150,start,end);
+                        cxt.fill();                        
+                        cxt.stroke();
+                     start += nums[i]/50*Math.PI;//起始角度
+                   }
+                }                
+                 pieChart();
+                 cxt.beginPath();
+                 createSector(cxt,0,0,75,0,Math.PI*2);
+                 cxt.fillStyle = "white";
+                 cxt.fill(); 
+                 }
+        </script>
+    </body>
+</html>
